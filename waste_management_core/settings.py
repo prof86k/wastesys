@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from pathlib import Path
-
+from django.contrib.messages import constants as messages
+import waste_management_core.dbConfig as dbConfig
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -31,7 +33,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'accounts.apps.AccountsConfig',
+    'waste.apps.WasteConfig',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -48,13 +52,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+AUTH_USER_MODEL = 'accounts.User'
 ROOT_URLCONF = 'waste_management_core.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': filter(None,os.getenv('TEMPLATES_DIRS',"").split(',')),
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,10 +78,17 @@ WSGI_APPLICATION = 'waste_management_core.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    'default':{
+        'ENGINE':dbConfig.db_conection.get('ENGINE'),
+        'NAME':dbConfig.db_conection.get('NAME'),
+        'USER':dbConfig.db_conection.get('USER'),
+        'PASSWORD':dbConfig.db_conection.get('PASSWORD'),
+        'PORT':dbConfig.db_conection.get('PORT')
     }
+    # 'default': {
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+    # }
 }
 
 
@@ -111,11 +122,25 @@ USE_I18N = True
 
 USE_TZ = True
 
+MESSAGE_TAGS = {
+    messages.ERROR:'alert alerts-danger',
+    messages.SUCCESS:'alert alert-success',
+    messages.WARNING:'alert alert-warning',
+    messages.INFO:'alert alert-info',
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,'static'),
+]
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = [ 
+    os.path.join(BASE_DIR,'media'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

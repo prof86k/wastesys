@@ -13,9 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
+# from django.contrib import admin
+from django.urls import path,include
+from django.conf import settings
+from django.conf.urls.static import static
+
+from waste_management_core.settings import MEDIA_ROOT
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-]
+    # path('admin/', admin.site.urls),
+    path('',include('accounts.urls')),
+    path('waste/',include('waste.urls'))
+]+static(
+    settings.STATIC_URL,document_root=settings.STATIC_ROOT
+)+static(
+    settings.MEDIA_URL,document_root=MEDIA_ROOT
+    )
