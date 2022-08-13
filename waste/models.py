@@ -8,6 +8,8 @@ class WasteLocation(models.Model):
     @ The location of the waste can be found (chamba east) and some digital address
     '''
     location        = models.CharField(verbose_name='Waste Location:',max_length=255,null=True,blank=True)
+    date_created    = models.DateTimeField(auto_now_add=True)
+    date_updated    = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.location
@@ -23,7 +25,9 @@ class WasteType(models.Model):
     @ What type of waste we collect
     '''
     title       = models.CharField(verbose_name='Waste Type:',max_length=255,null=True,blank=True) #liquid,plastic etc
-
+    date_created    = models.DateTimeField(auto_now_add=True)
+    date_updated    = models.DateTimeField(auto_now=True)
+    
     def __str__(self) -> str:
         return self.title
     
@@ -54,7 +58,7 @@ class DustBin(models.Model):
     bin_ready       = models.BooleanField(default=False)
     bin_collected   = models.BooleanField(default=False)
     payment_made    = models.BooleanField(default=False)
-    bin_returned    = models.BooleanField(default=False)
+    empty_bin       = models.BooleanField(default=True)
     date_created    = models.DateTimeField(auto_now_add=True)
     date_updated    = models.DateTimeField(auto_now=True)
 
