@@ -51,3 +51,19 @@ class UserLoginForm(forms.Form):
                     'class':'form-control','placeholder':'Password here ..'
                 })
             )
+
+class UserProfileForm(forms.ModelForm):
+    '''
+    @ users are allow to update their profile here
+    '''
+    class Meta:
+        model = mdl.UserProfile
+        fields = ('user','profile_pic')
+        widgets = {
+            'user':forms.TextInput(attrs={
+                'class':'form-control','required':True,
+            }),
+            'profile_pic':forms.ClearableFileInput(attrs={
+                'class':'form-control','required':False,
+            })
+        }

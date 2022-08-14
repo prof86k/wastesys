@@ -88,12 +88,19 @@ def update_profile(request: HttpRequest,user_id:int,*args, **kwargs) -> JsonResp
     '''
     @ update user profile
     '''
+    user = get_object_or_404(mdl.User,id=user_id)
+    admin_user = get_object_or_404(mdl.User,email=request.user.username)
     if request.is_ajax():
-        user = get_object_or_404(mdl.User,id=user_id)
-        admin_user = get_object_or_404(mdl.User,email=request.user.username)
         if (admin_user.admin) or (request.user == user):
             user_profile_info = get_object_or_404(mdl.UserProfile,user=user)
-        return JsonResponse()
+            form = fms.UserProfileForm(instance=user_profile_info,data=request.POST)
+            if form.is_valid():
+                form.save()
+                return JsonResponse({
+                    'success':{
+                        'msg':'Record Updated Successfully'
+                    }
+                })
 
 def display_all_users(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     '''
