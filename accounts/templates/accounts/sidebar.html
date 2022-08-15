@@ -1,0 +1,71 @@
+{% load static %}
+<nav id="sidebar">
+    <div class="sidebar_blog_1">
+        <div class="sidebar-header">
+            <div class="logo_section">
+                <a href="{% url 'accounts:dashboard' %}"><img class="logo_icon img-responsive" src="{% static 'images/logo/logo_icon.png' %}" alt="#" /></a>
+            </div>
+        </div>
+        <div class="sidebar_user_info">
+            <div class="icon_setting"></div>
+            <div class="user_profle_side">
+                <div class="user_img"><img class="img-responsive" src="{% static 'images/layout_img/user_img.jpg' %}" alt="#" /></div>
+                <div class="user_info">
+                    <h6>John David</h6>
+                    <p><span class="online_animation"></span> Online</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar_blog_2">
+        <h4>General</h4>
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="{% url 'accounts:dashboard' %}">
+                    <i class="fa fa-dashboard yellow_color"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            <li><a href="{% url 'accounts:show_users' %}"><i class="fa fa-users yellow_color"></i> <span>System Users</span></a></li>
+            <li>
+                <a href="#element" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                    <i class="fa fa-location-arrow orange_color"></i> <span>Waste Locations</span>
+                </a>
+                <ul class="collapse list-unstyled" id="element">
+                    <li>
+                        <a href="{% url 'waste:waste_locations' %}"> <i class="fa fa-minus"></i> <span>Locations Covered</span></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'waste:add_places' %}"> <i class="fa fa-minus"></i> <span>Add Location</span></a>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                    <i class="fa fa-trash-o red_color"></i> <span>Waste Type</span>
+                </a>
+                <ul class="collapse list-unstyled" id="dashboard">
+                    <li><a href="{% url 'waste:waste_types' %}"><i class="fa fa-minus"></i> <span>Waste Types</span></a></li>
+                    <li>
+                        <a href="{% url 'waste:add_type' %}"> <i class="fa fa-minus"></i> <span>Add Waste Type</span></a>
+                    </li>
+                </ul>
+            </li>
+            <li class="active">
+                <a href="#additional_page" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-clone yellow_color"></i> <span>Wastes Collected</span></a>
+                <ul class="collapse list-unstyled" id="additional_page">
+                    <li>
+                        <a href="{% url 'waste:waste_disposed' %}"> <i class="fa fa-minus"></i> <span>Collected</span></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'waste:waste_disposed' %}"> <i class="fa fa-minus"></i> <span>Uncollected</span></a>
+                    </li>
+                </ul>
+            </li>
+
+            <li><a href="{% url 'waste:waste_settings' %}"><i class="fa fa-cog yellow_color"></i> <span>Settings</span></a></li>
+            <li><a href="{% url 'accounts:user_logout' %}"><i class="fa fa-sign-out red_color"></i><span>Logout</span></a></li>
+
+        </ul>
+    </div>
+</nav>

@@ -24,7 +24,7 @@ def user_account_creation(request: HttpRequest, *args, **kwargs) -> HttpResponse
     else:
         form    = fms.UserRegistrationForm()
     context = {'form':form}
-    return render(request,'',context)
+    return render(request,'accounts/register.html',context)
 
 def user_login(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     '''
@@ -42,10 +42,10 @@ def user_login(request: HttpRequest, *args, **kwargs) -> HttpResponse:
                     return redirect('accounts:dashboard')
                 else:
                     return redirect('accounts:user_dashboard')
-        else:
-            form    = fms.UserLoginForm()
+    else:
+        form    = fms.UserLoginForm()
     context = {'form':form}
-    return render(request,'',context)
+    return render(request,'accounts/login.html',context)
 
 def dashboard(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     '''
@@ -63,7 +63,7 @@ def dashboard(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         'places_covered':places_covered,
         'waste_type_covered':waste_type_covered
     }
-    return render(request,'',context)
+    return render(request,'accounts/dashboard.html',context)
 
 def users_dashboard(request: HttpRequest, *agrs,**kwargs) -> HttpResponse:
     '''

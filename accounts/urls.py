@@ -6,7 +6,7 @@ from . import views as vi
 
 app_name = 'accounts'
 urlpatterns = [  
-    path(' ',vi.user_login,name='user_login'),
+    path('',vi.user_login,name='user_login'),
     path('create-account',vi.user_account_creation,name='create_account'),
     path('dashboard',vi.dashboard,name='dashboard'),
     path('my/dashboard',vi.users_dashboard,name='user_dashboard'),
