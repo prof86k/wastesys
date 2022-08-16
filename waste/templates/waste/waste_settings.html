@@ -1,0 +1,151 @@
+{% extends "accounts/base.html" %}
+<!--  -->
+{% block title %} Waste Settings {% endblock title %}
+<!--  -->
+{% block header %}Waste Settings{% endblock header %}
+
+<!--  -->
+{% block page %}
+<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal" data-toggle="tooltip" data-placement="top" title="Add New Record">
+    <i class="fa fa-plus"></i> Add Settings</a>
+<!--  -->
+{% endblock page %}
+<!--  -->
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        {% for message in messages %}
+        <div class="alert {{message.tags}} " role="alert">
+            {{message}}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 class="header-title">Settings</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="table_section padding_infor_info">
+                        <div class="table-responsive-sm">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">No.</th>
+                                        <th class="text-center">Location</th>
+                                        <th class="text-center">Waste Type</th>
+                                        <th class="text-center">Amount</th>
+                                        <th class="text-center">Date Creatd</th>
+                                        <th class="text-center">Option</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for setting in waste_settings %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{setting.location}}</td>
+                                        <td>{{setting.waste_type}}</td>
+                                        <td>{{setting.dues}}</td>
+                                        <td>{{setting.date_created}}</td>
+                                        <td>
+                                            <a href="{% url 'waste:edit_type' waste_id=setting.id %}" data-toggle="tooltip" class="text-success mr-3" data-placement="top" title="Edit Record">
+                                                <i class="fa fa-edit"></i> edit
+                                            </a>
+                                            <a href="#" data-toggle="modal" data-target="#myModal{{setting.id}}" data-toggle="tooltip" class="text-danger mr-3" data-placement="top" title="Delete Record">
+                                                <i class="fa fa-trash"></i> delete
+                                                <!-- The Modal -->
+                                                <div class="modal fade" id="myModal{{setting.id}}">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <!-- Modal Header -->
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">Are You Sure You Want To Delete Record?</h4>
+                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            </div>
+                                                            <!-- Modal footer -->
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="tooltip" data-placement="top" title="Don't Delete">No</button>
+                                                                <a href="{% url 'waste:delete_type' waste_id=setting.id %}" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Record Will Be Delete">Yes</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- end model popup -->
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="modal-title">Add Settings</h4>
+                        </div>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form id="form" action="{% url 'waste:waste_settings'%}" method="post">
+                        {% csrf_token %}
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="location">{{form.location.label}}</label> {{form.location}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="waste_type">{{form.waste_type.label}}</label> {{form.waste_type}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="settings_title">{{form.settings_title.label}}</label> {{form.settings_title}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="dues">{{form.dues.label}}</label> {{form.dues}}
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button class="btn btn-success btn-block" type="submit">Save Settings</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

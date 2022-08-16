@@ -61,6 +61,7 @@ class DustBin(models.Model):
     bin_ready       = models.BooleanField(default=False)
     bin_collected   = models.BooleanField(default=False)
     payment_made    = models.BooleanField(default=False)
+    payment_confirm = models.BooleanField(default=False)
     empty_bin       = models.BooleanField(default=True)
     date_created    = models.DateTimeField(auto_now_add=True)
     date_updated    = models.DateTimeField(auto_now=True)
@@ -81,8 +82,8 @@ class WasteSettings(models.Model):
     @ the location price
     @ the waste type price
     '''
-    location        = models.OneToOneField(WasteLocation,on_delete=models.CASCADE,related_name='location_setting')
-    waste_type      = models.OneToOneField(WasteType,on_delete=models.CASCADE,related_name='waste_type_setting')
+    location        = models.ForeignKey(WasteLocation,on_delete=models.CASCADE,related_name='location_setting')
+    waste_type      = models.ForeignKey(WasteType,on_delete=models.CASCADE,related_name='waste_type_setting')
     settings_title  = models.CharField(verbose_name='Setting Title:',max_length=255,default='Waste Payment Plan')
     dues            = models.DecimalField(verbose_name='Amount Payable:',max_digits=20,decimal_places=2)
     date_created    = models.DateTimeField(auto_now_add=True)
@@ -95,3 +96,17 @@ class WasteSettings(models.Model):
         managed = True
         verbose_name = 'WasteSetting'
         verbose_name_plural = 'WasteSettings'
+
+
+class WasteDisposalPayment(models.Model):
+    '''
+    @user makes payment to confirm they want to dispose their refuse
+    '''
+    user                    = models.ForeignKey(acmdl.User,on_delete=models.PROTECT,related_name='user_payments')
+    amount                  = models.OneToOneField(WasteSettings,on_delete=models.PROTECT,related_name='waste_payments')
+    payment_confirmation    = models.BooleanField(default=False)
+    payment_date            = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self) -> str:
+        return f'{self.user} paid {self.amount.dues}'

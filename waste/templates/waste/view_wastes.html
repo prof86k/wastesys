@@ -1,0 +1,122 @@
+{% extends "accounts/base.html" %} {% load static %}
+<!--  -->
+{% block title %} Wastes {% endblock title %}
+<!--  -->
+{% block header %} All My Waste {% endblock header %}
+<!--  -->
+{% block page %}
+<a href="{% url 'waste:dispose_waste' %}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="View Other Records">
+    <i class="fa fa-eye"></i> Refuse</a>
+<!--  -->
+{% endblock page %}
+<!--  -->
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        {% for message in messages %}
+        <div class="alert {{message.tags}} " role="alert">
+            {{message}}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% for waste_bin in waste_collected %}
+<div class="row mb-4">
+    <div class="col-md-12 col-sm-12 col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 class="header-title">{{waste_bin|title}}</h4>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{% url 'waste:check_waste' bin_id=waste_bin.id %}" class="btn btn-outline-primary offset-8" data-toggle="tooltip" data-placement="top" title="View Other Records">
+                            <i class="fa fa-eye"></i> Refuse Details</a>
+                        <!--  -->
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <h5>Waste Bin Label</h5> {{waste_bin}}
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Waste Owner</h5>
+                            {{waste_bin.user.full_name}}
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Payment Status</h5>
+                            {% if waste_bin.payment_made %} <span class="text-success">Paid</span>{% else %} <span class="text-danger">Unpaid</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <h5>Waste Location</h5>
+                            {{waste_bin.location}}
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Waste Type</h5>
+                            {{waste_bin.waste_type}}
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Waste Digital Address</h5>
+                            {{waste_bin.digital_address}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>Waste Location Coordinate</h5>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <h6>Latitude</h6>
+                                        {{waste_bin.gps_latitude}}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Longitude</h6>
+                                        {{waste_bin.gps_longitude}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Waste Collected</h5>
+                            {% if waste_bin.bin_collected %}
+                            <span class="text-success">Yes</span> {% else %}
+                            <span class="text-danger">No</span> {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Payment Confirmed</h5>
+                            {% if waste_bin.payment_confirm %}
+                            <span class="text-success">Yes</span> {% else %}
+                            <span class="text-danger">No</span> {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="modal-title">Add Refuse Type</h4>
+                    </div>
+                </div>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<!--  -->
+{% endblock content %}

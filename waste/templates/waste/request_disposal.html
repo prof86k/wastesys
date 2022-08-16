@@ -37,9 +37,10 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">No.</th>
-                                    <th class="text-center">Refuse Type</th>
+                                    <th class="text-center">Refuse Label</th>
+                                    <th class="text-center">Waste Type</th>
+                                    <th class="text-center">Owner</th>
                                     <th class="text-center">Date Created</th>
-                                    <th class="text-center">Date Updated</th>
                                     <th class="text-center">Option</th>
                                 </tr>
                             </thead>
@@ -48,10 +49,11 @@
                                 <tr>
                                     <td>{{forloop.counter}}</td>
                                     <td>{{bins}}</td>
+                                    <td>{{bins.waste_type}}</td>
+                                    <td>{{bins.user.full_name}}</td>
                                     <td>{{bins.date_created}}</td>
-                                    <td>{{bins.date_updated}}</td>
                                     <td>
-                                        <a href="http://" data-toggle="tooltip" class="text-primary mr-3" data-placement="top" title="View Details">
+                                        <a href="{% url 'waste:check_waste' bin_id=bins.id %}" data-toggle="tooltip" class="text-primary mr-3" data-placement="top" title="View Details">
                                             <i class="fa fa-eye"></i> view
                                         </a>
                                         <a href="{% url 'waste:edit_bin' bin_id=bins.id %}" data-toggle="tooltip" class="text-success mr-3" data-placement="top" title="Edit Record">

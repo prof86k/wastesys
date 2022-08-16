@@ -1,8 +1,10 @@
+import email
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import JsonResponse,HttpResponse,HttpRequest
 from django.contrib import messages as msg
 
 from . import models as mdl
+from accounts import models as acmdl
 from . import forms as fms
 # Create your views here.
 def is_ajax(request):
@@ -118,51 +120,87 @@ def delete_waste_type_collected(request: HttpRequest,waste_id: int ,*args, **kwa
 def request_was_disposal(request: HttpRequest,*args, **kwargs) -> HttpResponse:
     '''
     @ send the disposable bins
-    @ list the disposed bins
-    @ list the ready bins
     @ a user fill in the waste disposal form and submit
     '''
-    waste_collected = mdl.DustBin.objects.filter(empty_bin=True).all()
-    waste_ready     = mdl.DustBin.objects.filter(bin_ready=True,empty_bin=False).all()
+    waste_ready     = mdl.DustBin.objects.order_by('-date_created').filter(bin_ready=True,empty_bin=False).all()
     if request.method == 'POST':
         form = fms.DustBinForm(request.POST)
         if form.is_valid():
             new_waste_bin = form.save(commit=False)
             new_waste_bin.user = request.user
+            new_waste_bin.empty_bin = False
             new_waste_bin.save()
-            return redirect('waste:waste_disposed')
+            msg.success(request,'Record Added Successfully')
+            return redirect('waste:dispose_waste')
     else:
         form = fms.DustBinForm()
     context = {
     'form':form,
-    'waste_collected':waste_collected,
     'waste_ready':waste_ready
     }
     return render(request,'waste/request_disposal.html',context)
 
-def edit_waste_bin(request: HttpRequest,bin_id: int, *args, **kwargs) -> JsonResponse:
+def view_waste_sent(request: HttpRequest) -> HttpResponse:
+    '''
+    @ list the disposed bins
+    @ list the ready bins
+    '''
+    waste_collected = mdl.DustBin.objects.order_by('-date_updated').filter(user=request.user).all()
+
+    context = {
+        'waste_collected':waste_collected,
+    }
+    return render(request,'waste/view_wastes.html',context)
+
+def edit_waste_bin(request: HttpRequest,bin_id: int, *args, **kwargs) -> HttpResponse:
     '''
     @ update the record of existing waste bin
     '''
     waste_bin = get_object_or_404(mdl.DustBin,id=bin_id)
-    if request.is_ajax():
+    if request.method == 'POST':
         form = fms.DustBinForm(instance=waste_bin,data=request.POST)
         if form.is_valid():
             form.save()
-            # msg.success(request,'')
-            return JsonResponse({
-                'success':{
-                    'msg':'Record Updated Successfully'
-                }
-            })
-            # redirect('waste:waste_disposed')
+            msg.success(request,'Record Updated Successfully')
+            return redirect('waste:dispose_waste')
     else:
         form = fms.DustBinForm(instance=waste_bin)
     context = {
         'form':form,
         'waste_bin':waste_bin
     }
-    return render(request,'',context)
+    return render(request,'waste/edit_disposed_waste.html',context)
+
+def check_waste_bin(request: HttpRequest,bin_id: int, *args, **kwargs) -> HttpResponse:
+    '''
+    @ update the record of existing waste bin
+    '''
+    waste_bin = get_object_or_404(mdl.DustBin,id=bin_id)
+    settings = mdl.WasteSettings.objects.filter(location=waste_bin.location,waste_type=waste_bin.waste_type).first()
+    if request.method == 'POST':
+        form = fms.WastePaymentForm(request.POST)
+        if form.is_valid() and not waste_bin.payment_made:
+            user    = form.cleaned_data.get('user')
+            amount = form.cleaned_data.get('amount')
+            mdl.WasteDisposalPayment.objects.create(
+                user=acmdl.User.objects.filter(email=user).first(),
+                amount= mdl.WasteSettings.objects.filter(dues=amount,location=waste_bin.location,waste_type=waste_bin.waste_type).first(),
+                payment_confirmation=True)
+            waste_bin.payment_made = True
+            waste_bin.save()
+            msg.success(request,'Payment made successfully')
+            return redirect('waste:check_waste',bin_id=waste_bin.id)
+        else:
+            msg.info(request,'Payment made already')
+            return redirect('waste:check_waste',bin_id=waste_bin.id)
+    else:
+        form = fms.WastePaymentForm()
+    context = {
+        'waste_bin':waste_bin,
+        'form':form,
+        'settings':settings,
+    }
+    return render(request,'waste/check_waste.html',context) 
 
 def delete_waste_bin(request: HttpRequest,bin_id: int, *args, **kwargs) -> HttpResponse:
     '''
@@ -177,15 +215,16 @@ def add_waste_settings(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     '''
     @ add the waste settings for every waste to be disposed
     '''
-    waste_settings = mdl.WasteSettings.objects.first()
+    waste_settings = mdl.WasteSettings.objects.order_by('-date_created').all()
     if request.method == 'POST':
-        form    = fms.WasteSettingsForm(instance=waste_settings, data=request.POST)
+        form    = fms.WasteSettingsForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('waste:settings')
+            return redirect('waste:waste_settings')
     else:
-        form = fms.WasteSettingsForm(instance=waste_settings)
+        form = fms.WasteSettingsForm()
     context = {
+        'form':form,
         'waste_settings':waste_settings,
     }
-    return render(request,'',context)
+    return render(request,'waste/waste_settings.html',context)

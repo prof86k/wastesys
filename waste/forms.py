@@ -58,11 +58,11 @@ class DustBinForm(forms.ModelForm):
             }),
             'gps_latitude':forms.TextInput(attrs={
                 'class':'form-control','placeholder':'Digital Address ...',
-                'required':True,'readonly':True
+                'required':True,
             }),
             'gps_longitude':forms.TextInput(attrs={
                 'class':'form-control','placeholder':'Digital Address ...',
-                'required':True,'readonly':True
+                'required':True,
             }),
             'bin_ready':forms.CheckboxInput(attrs={
                 'class':'form-check-input',
@@ -92,3 +92,16 @@ class WasteSettingsForm(forms.ModelForm):
                 'required':True,
             })
         } 
+
+
+class WastePaymentForm(forms.Form):
+    '''
+    @form for payment of waste disposal dues
+    '''
+
+    user =forms.CharField(max_length=255,label='User:',required=True, widget=forms.TextInput(attrs={
+        'class':'form-control','readonly':True
+    }))
+    amount =forms.DecimalField(max_digits=255,label='Amount:',widget=forms.NumberInput(attrs={
+        'class':'form-control','readonly':True
+    }))

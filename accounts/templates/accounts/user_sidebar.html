@@ -11,7 +11,7 @@
             <div class="user_profle_side">
                 <div class="user_img"><img class="img-responsive" src="{% static 'images/layout_img/user_img.jpg' %}" alt="#" /></div>
                 <div class="user_info">
-                    <h6>John David</h6>
+                    <h6>{{request.user.full_name}}</h6>
                     <p><span class="online_animation"></span> Online</p>
                 </div>
             </div>
@@ -21,7 +21,7 @@
         <h4>General</h4>
         <ul class="list-unstyled components">
             <li class="active">
-                <a href="{% url 'accounts:dashboard' %}">
+                <a href="{% url 'accounts:user_dashboard' %}">
                     <i class="fa fa-dashboard yellow_color"></i> <span>Dashboard</span>
                 </a>
             </li>
@@ -30,10 +30,10 @@
                 <a href="#additional_page" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-clone yellow_color"></i> <span>Wastes Collected</span></a>
                 <ul class="collapse list-unstyled" id="additional_page">
                     <li>
-                        <a href="{% url 'waste:dispose_waste' %}"> <i class="fa fa-minus"></i> <span>Collected</span></a>
+                        <a href="{% url 'waste:sent_waste' %}"> <i class="fa fa-minus"></i> <span>View Wastes</span></a>
                     </li>
                     <li>
-                        <a href="{% url 'waste:dispose_waste' %}"> <i class="fa fa-minus"></i> <span>Uncollected</span></a>
+                        <a href="{% url 'waste:dispose_waste' %}"> <i class="fa fa-minus"></i> <span>Send Waste Request</span></a>
                     </li>
                 </ul>
             </li>
