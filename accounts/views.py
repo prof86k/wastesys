@@ -15,6 +15,7 @@ from waste import models as wdl
 def user_account_creation(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     '''
     @ user registration view
+    passwaord:waste2022
     '''
     if request.method == 'POST':
         form     = fms.UserRegistrationForm(request.POST)
@@ -33,15 +34,17 @@ def user_login(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     if request.method == "POST":
         form    = fms.UserLoginForm(request.POST)
         if form.is_valid():
-            username    = form.cleaned_data.get('email')
+            email    = form.cleaned_data.get('email')
             password    = form.cleaned_data.get('password')
-            user = authenticate(request,username=username,password=password)
+            user = authenticate(request,username=email,password=password)
             if user is not None:
                 login(request,user)
                 if user.admin:
                     return redirect('accounts:dashboard')
                 else:
                     return redirect('accounts:user_dashboard')
+            else:
+                msg.error(request,'No User found')
     else:
         form    = fms.UserLoginForm()
     context = {'form':form}
@@ -51,17 +54,27 @@ def dashboard(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     '''
     @ admin user dashboard view
     '''
-    number_of_users = mdl.User.objects.filter(staff=True).count()
+    number_of_users = mdl.User.objects.filter(staff=True,admin=True).count()
     number_of_admin = mdl.User.objects.filter(admin=True).count()
-    total_wastes    = wdl.DustBin.objects.count()
+    total_wastes    = wdl.DustBin.objects.filter(bin_collected=True,payment_made=True).count()
+    new_wastes    = wdl.DustBin.objects.filter(bin_ready=True).count()
+    paid_wastes    = wdl.DustBin.objects.filter(payment_made=True).count()
+    unpaid_wastes    = wdl.DustBin.objects.filter(bin_collected=False,payment_made=False).count()
+    wastes          = wdl.DustBin.objects.order_by('-date_created').all()
+    places          = wdl.WasteLocation.objects.order_by('-date_created').all()
     places_covered  = wdl.WasteLocation.objects.count()
     waste_type_covered  = wdl.WasteType.objects.count()
     context = {
+        'wastes':wastes,
+        'places':places,
         'number_of_users':number_of_users,
         'number_of_admin':number_of_admin,
         'total_wastes':total_wastes,
         'places_covered':places_covered,
-        'waste_type_covered':waste_type_covered
+        'waste_type_covered':waste_type_covered,
+        'new_wastes':new_wastes,
+        'paid_wastes':paid_wastes,
+        'unpaid_wastes':unpaid_wastes
     }
     return render(request,'accounts/dashboard.html',context)
 
@@ -71,7 +84,7 @@ def users_dashboard(request: HttpRequest, *agrs,**kwargs) -> HttpResponse:
     '''
     my_disposed_waste   = wdl.DustBin.objects.filter(user=request.user).count()
     context = {'my_disposed_waste':my_disposed_waste}
-    return render(request,'',context)
+    return render(request,'accounts/user_dashboard.html',context)
 
 def profile(request: HttpRequest ,user_id: int,*args, **kwargs) -> HttpResponse:
     '''

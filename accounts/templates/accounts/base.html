@@ -36,7 +36,15 @@
     <div class="full_container">
         <div class="inner_container">
             <!-- Sidebar  -->
+            {% if request.user.admin %}
+            <!--  -->
             {% include "accounts/sidebar.html" %}
+            <!--  -->
+            {% else %}
+            <!--  -->
+            {% include "accounts/user_sidebar.html" %}
+            <!--  -->
+            {% endif %}
             <!-- end sidebar -->
             <!-- right content -->
             <div id="content">
@@ -49,23 +57,28 @@
                         <div class="row column_title">
                             <div class="col-md-12">
                                 <div class="page_title">
-                                    <h2>{% block header %} {% endblock header %}</h2>
+                                    <div class="row">
+                                        <h4>{% block header %} {% endblock header %}</h4>
+                                        <p class="offset-md-9">{% block page %} {% endblock page %}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {% block content %} {% endblock content %}
-                    <!-- include footer -->
-                    {% include "accounts/footer.html" %}
                 </div>
-                <!-- end dashboard inner -->
+                {% block content %} {% endblock content %}
+                <!-- include footer -->
+                {% include "accounts/footer.html" %}
             </div>
+            <!-- end dashboard inner -->
         </div>
+    </div>
     </div>
     <!-- jQuery -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% block scripts %} {% endblock scripts %}
     <!-- wow animation -->
     <script src="{% static 'js/animate.js' %}"></script>
     <!-- select country -->
@@ -84,10 +97,10 @@
         var ps = new PerfectScrollbar('#sidebar');
     </script>
     <!-- custom js -->
-    <!-- <script src="{% static 'js/custom.js' %}"></script> -->
-    <script src="{% static 'js/countup/jquery.counterup.min.js' %}"></script>
-    <script src="{% static 'js/countup/jquery.missofis-countdown.js' %}"></script>
-    <script src="{% static 'js/countup/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!-- <script src="{% static 'js/countup/jquery.counterup.min.js' %}"></script> -->
+    <!-- <script src="{% static 'js/countup/jquery.missofis-countdown.js' %}"></script> -->
+    <!-- <script src="{% static 'js/countup/jquery.waypoints.min.js' %}"></script> -->
 </body>
 
 <!-- Mirrored from technext.github.io/pluto/dashboard_2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 02 Apr 2022 01:25:54 GMT -->

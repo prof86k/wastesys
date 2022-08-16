@@ -16,7 +16,7 @@
             </div>
             <div class="counter_no">
                 <div>
-                    <p class="total_no counter"><span class="counter">2500</span></p>
+                    <p class="total_no counter"><span class="counter">{{places_covered}}</span></p>
                     <p class="head_couter">Places Covered</p>
                 </div>
             </div>
@@ -31,7 +31,7 @@
             </div>
             <div class="counter_no">
                 <div>
-                    <p class="total_no">123.50</p>
+                    <p class="total_no">{{waste_type_covered}}</p>
                     <p class="head_couter">Waste Type</p>
                 </div>
             </div>
@@ -48,11 +48,11 @@
             <div class="social_cont">
                 <ul>
                     <li>
-                        <span><strong>35k</strong></span>
+                        <span><strong>{{total_wastes}}</strong></span>
                         <span>Collected</span>
                     </li>
                     <li>
-                        <span><strong>128</strong></span>
+                        <span><strong>{{new_wastes}}</strong></span>
                         <span>New</span>
                     </li>
                 </ul>
@@ -68,11 +68,11 @@
             <div class="social_cont">
                 <ul>
                     <li>
-                        <span><strong>584k</strong></span>
+                        <span><strong>{{paid_wastes}}</strong></span>
                         <span>Confirmed</span>
                     </li>
                     <li>
-                        <span><strong>978</strong></span>
+                        <span><strong>{{unpaid_wastes}}</strong></span>
                         <span>Unpaid</span>
                     </li>
                 </ul>
@@ -88,11 +88,11 @@
             <div class="social_cont">
                 <ul>
                     <li>
-                        <span><strong>450</strong></span>
+                        <span><strong>{{number_of_users}}</strong></span>
                         <span>Users</span>
                     </li>
                     <li>
-                        <span><strong>57</strong></span>
+                        <span><strong>{{number_of_admin}}</strong></span>
                         <span>Admins</span>
                     </li>
                 </ul>
@@ -116,11 +116,9 @@
                 </div>
                 <div class="task_list_main">
                     <ul class="task_list">
-                        <li><a href="#">Meeting about plan for Admin Template 2018</a><br><strong>10:00 AM</strong></li>
-                        <li><a href="#">Create new task for Dashboard</a><br><strong>10:00 AM</strong></li>
-                        <li><a href="#">Meeting about plan for Admin Template 2018</a><br><strong>11:00 AM</strong></li>
-                        <li><a href="#">Create new task for Dashboard</a><br><strong>10:00 AM</strong></li>
-                        <li><a href="#">Meeting about plan for Admin Template 2018</a><br><strong>02:00 PM</strong></li>
+                        {% for waste in wastes %}
+                        <li><a href="#">{{waste.bin_label}}</a><br><strong>{{waste.user}}</strong></li>
+                        {% endfor %}
                     </ul>
                 </div>
                 <div class="read_more">
@@ -137,40 +135,21 @@
                 <div class="dash_head">
                     <h3><span><i class="fa fa-ellipsis-v"></i> Places Covered</span><span class="plus_green_bt"><a href="#">+</a></span></h3>
                 </div>
+                <div class="list_cont">
+                    <p>Places Covered</p>
+                </div>
                 <div class="msg_list_main">
                     <ul class="msg_list">
+                        {% for place in places %}
                         <li>
-                            <span><img src="images/layout_img/msg2.png" class="img-responsive" alt="#" /></span>
+                            <span>{{place}}</span>
                             <span>
                           <span class="name_user">John Smith</span>
                             <span class="msg_user">Sed ut perspiciatis unde omnis.</span>
                             <span class="time_ago">12 min ago</span>
                             </span>
                         </li>
-                        <li>
-                            <span><img src="images/layout_img/msg3.png" class="img-responsive" alt="#" /></span>
-                            <span>
-                          <span class="name_user">John Smith</span>
-                            <span class="msg_user">On the other hand, we denounce.</span>
-                            <span class="time_ago">12 min ago</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span><img src="images/layout_img/msg2.png" class="img-responsive" alt="#" /></span>
-                            <span>
-                          <span class="name_user">John Smith</span>
-                            <span class="msg_user">Sed ut perspiciatis unde omnis.</span>
-                            <span class="time_ago">12 min ago</span>
-                            </span>
-                        </li>
-                        <li>
-                            <span><img src="images/layout_img/msg3.png" class="img-responsive" alt="#" /></span>
-                            <span>
-                          <span class="name_user">John Smith</span>
-                            <span class="msg_user">On the other hand, we denounce.</span>
-                            <span class="time_ago">12 min ago</span>
-                            </span>
-                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
                 <div class="read_more">

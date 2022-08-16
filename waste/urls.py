@@ -4,7 +4,7 @@ from . import views as vi
 
 app_name = 'waste'
 urlpatterns = [  
-    path('waste-places',vi.places_covered,name='waste_locations'), 
+    # path('waste-places',vi.places_covered,name='waste_locations'), 
     path('add-waste/places',vi.add_place_to_cover,name='add_places'), 
     path('edit-waste/place/<int:location_id>',vi.edit_waste_places_covered,name='edit_place'), 
     path('delete-waste/place/<int:location_id>',vi.delete_waste_location_covered,name='delete_place'), 

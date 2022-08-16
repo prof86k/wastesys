@@ -1,0 +1,200 @@
+{% extends "accounts/base.html" %} {% load static %}
+<!--  -->
+{% block title %} add place {% endblock title %}
+<!--  -->
+{% block header %} Add Place {% endblock header %}
+<!--  -->
+{% block page %}
+<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal" data-toggle="tooltip" data-placement="top" title="Add New Record"><i class="fa fa-plus"></i> New Place</a>
+<!--  -->
+{% endblock page %}
+<!--  -->
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        {% for message in messages %}
+        <div class="alert {{message.tags}} " role="alert">
+            {{message}}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 class="header-title">Add Place</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table_section padding_infor_info">
+                    <div class="table-responsive-sm">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">No.</th>
+                                    <th class="text-center">Location</th>
+                                    <th class="text-center">Digital Address</th>
+                                    <th class="text-center">Latitude</th>
+                                    <th class="text-center">Longitude</th>
+                                    <th class="text-center">Date Created</th>
+                                    <th class="text-center">Option</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for place in places %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{place}}</td>
+                                    <td>{{place.digital_address}}</td>
+                                    <td>{{place.gps_latitude}}</td>
+                                    <td>{{place.gps_longitude}}</td>
+                                    <td>{{place.date_created}}</td>
+                                    <td>
+                                        <a href="http://" data-toggle="tooltip" class="text-primary mr-3" data-placement="top" title="View Details">
+                                            <i class="fa fa-eye"></i> view
+                                        </a>
+                                        <a href="{% url 'waste:edit_place' location_id=place.id %}" data-toggle="tooltip" class="text-success mr-3" data-placement="top" title="Edit Record">
+                                            <i class="fa fa-edit"></i> edit
+                                        </a>
+                                        <a href="#" data-toggle="modal" data-target="#myModal{{place.id}}" data-toggle="tooltip" class="text-danger mr-3" data-placement="top" title="Delete Record">
+                                            <i class="fa fa-trash"></i> delete
+                                            <!-- The Modal -->
+                                            <div class="modal fade" id="myModal{{place.id}}">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <!-- Modal Header -->
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Are You Sure You Want To Delete Record?</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <!-- Modal footer -->
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="tooltip" data-placement="top" title="Don't Delete">No</button>
+                                                            <a href="{% url 'waste:delete_place' location_id=place.id %}" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Record Will Be Delete">Yes</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end model popup -->
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="modal-title">Add Place</h4>
+                        <button id="get_coordinates" class="btn" data-toggle="tooltip" data-placement="top" title="Generate Coordinate Online. You must be connected to a network">get coordinates</button>
+                    </div>
+                </div>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form id="form" action="{% url 'waste:add_places' %}" method="post">
+                    {% csrf_token %}
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="location">{{form.location.label}}</label> {{form.location}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="gps_latitude">{{form.gps_latitude.label}}</label> {{form.gps_latitude}}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="gps_longitude">{{form.gps_longitude.label}}</label> {{form.gps_longitude}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="digital_address">{{form.digital_address.label}}</label> {{form.digital_address}}
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button class="btn btn-success btn-block" type="submit">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+<!--  -->
+{% block scripts %}
+<script src="{% static 'js/custom/coordinates.js' %}"></script>
+<script>
+    // issaih 55:1-7
+    //$(document).ready(function() {
+    //    const csrf = document.getElementsByName('csrfmiddlewaretoken');
+    //    const location = $('#id_location');
+    //    const latitude = $('#id_gps_latitude');
+    //    const longitude = $('#id_gps_longitude');
+    //    const digitaladdress = $('#id_digital_address');
+    //    $('#form').on('submit', (e) => {
+    //        e.preventDefault();
+    //        const form = {
+    //                'csrfmiddlewaretoken': csrf[0].value,
+    //                'location': location.val(),
+    //                'latitude': latitude.val(),
+    //                'longitude': longitude.val(),
+    //                'digital_address': digitaladdress.val(),
+    //            }
+    //            //console.log(csrf[0].value)
+    //        document.querySelector('#form').reset();
+    //        //postData(form);
+    //    });
+    //    const postData = (form) => {
+    //        data = {
+    //            method: "POST",
+    //            headers: {
+    //                'content-type': 'application/json',
+    //                'enctype': 'multipart/form-data',
+    //                'csrfmiddlewaretoken': csrf[0].value,
+    //            },
+    //            data: JSON.stringify(form),
+    //
+    //
+    //        }
+    //        fetch("{% url 'waste:add_places' %}", data).then((response) => {
+    //            response.json().then((data) => {
+    //                console.log(data)
+    //            }).then((error) => {
+    //                console.log(error);
+    //            });
+    //        });
+    //
+    //
+    //
+    //
+    //    }
+    //})
+</script>
+{% endblock scripts %}

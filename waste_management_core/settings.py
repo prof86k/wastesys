@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'waste.middlewares.AjaxMiddleWare',
 ]
 AUTH_USER_MODEL = 'accounts.User'
 ROOT_URLCONF = 'waste_management_core.urls'

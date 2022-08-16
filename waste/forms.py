@@ -2,14 +2,26 @@ from django import forms
 
 from . import models as mdl 
 
-class WasteLocationForm(forms.Form):
+class WasteLocationForm(forms.ModelForm):
     class Meta:
         model   = mdl.WasteLocation
-        fields  = ('location',)
+        fields  = ('location','digital_address','gps_latitude','gps_longitude',)
         widgets = {
             'location':forms.TextInput(attrs={
                 'placeholder': 'Location','class':'form-control','required':True,
                 }),
+            'digital_address':forms.TextInput(attrs={
+                'class':'form-control','placeholder':'Digital Address ...',
+                'required':True,
+            }),
+            'gps_latitude':forms.TextInput(attrs={
+                'class':'form-control','placeholder':'Digital Address ...',
+                'required':True,
+            }),
+            'gps_longitude':forms.TextInput(attrs={
+                'class':'form-control','placeholder':'Digital Address ...',
+                'required':True,
+            }),
         }
 
 class WasteTypeForm(forms.ModelForm):

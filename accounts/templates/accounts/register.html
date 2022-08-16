@@ -12,10 +12,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <!-- site metas -->
-    <title>Login</title>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <title>Create Account</title>
+    <meta name="keywords" content="waste, waste management system, refuse refuse management system">
+    <meta name="description" content="waste management system for controlling waste collection electronically">
+    <meta name="author" content="SAMPSON KUMA KONJA">
     <!-- site icon -->
     <link rel="icon" href="images/fevicon.html" type="image/png" />
     <!-- bootstrap css -->
@@ -34,16 +34,12 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
     <!-- calendar file css -->
     <link rel="stylesheet" href="js/semantic.min.html" />
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-      <![endif]-->
 </head>
 
 <body class="inner_page login">
     <div class="full_container">
         <div class="container">
-            <div class="center verticle_center full_height">
+            <div class="center verticle_center full_height mb-3">
                 <div class="login_section">
                     <div class="logo_login">
                         <div class="center">
@@ -54,25 +50,44 @@
                         <form action="{% url 'accounts:create_account' %}" method="POST">
                             {% csrf_token %}
                             <fieldset>
-                                <div class="field">
-                                    <label class="label_field">{{form.full_name.label}}</label> {{form.full_name}}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="full_name">{{form.full_name.label}}</label> {{form.full_name}}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="field">
-                                    <label class="label_field">{{form.email.label}}</label> {{form.email}}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="email">{{form.email.label}}</label> {{form.email}}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="field">
-                                    <label class="label_field">{{form.password.label}}</label> {{form.password}}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="password1">{{form.password1.label}}</label> {{form.password1}}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="field">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="password2">{{form.password2.label}}</label> {{form.password2}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <a class="forgot" href="#">Forgotten Password?</a>
                                 </div>
-                                <div class="field">
-                                    <button class="btn btn-success btn-block btn-lg">Sign In</button>
+                                <div class="row">
+                                    <button type="submit" class="btn btn-success btn-block btn-lg">Sign In</button>
                                 </div>
                             </fieldset>
-                            <div class="forgot">
-                                <p>Have Account?</p>
-                                <a class="forgot text-danger" href="{% url 'accounts:user_login' %}">Sign In</a>
+                            <div class="">
+                                Have Account? <a class="forgot text-danger" href="{% url 'accounts:user_login' %}">Sign In</a>
+                                </p>
                             </div>
 
                         </form>

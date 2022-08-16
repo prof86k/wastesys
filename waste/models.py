@@ -8,6 +8,9 @@ class WasteLocation(models.Model):
     @ The location of the waste can be found (chamba east) and some digital address
     '''
     location        = models.CharField(verbose_name='Waste Location:',max_length=255,null=True,blank=True)
+    digital_address = models.CharField(verbose_name='Digital Address:',max_length=255,null=True,blank=True)
+    gps_latitude    = models.CharField(verbose_name='Gps Latitude:',max_length=255,null=True,blank=True)
+    gps_longitude   = models.CharField(verbose_name='Gps Longitude:',max_length=255,null=True,blank=True)
     date_created    = models.DateTimeField(auto_now_add=True)
     date_updated    = models.DateTimeField(auto_now=True)
 

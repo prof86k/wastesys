@@ -5,42 +5,33 @@ from django.contrib import messages as msg
 from . import models as mdl
 from . import forms as fms
 # Create your views here.
+def is_ajax(request):
+    '''return valid for ajax call'''
+    return request.META.get("HTTP_X_REQUESTED_WITH") == 'XMLHttpRequest'
 
-def places_covered(request:HttpRequest, *args, **kwargs) -> HttpResponse:
-    '''
-    @ add the places to cover form
-    @ list the places covered
-    '''
-    form = fms.WasteLocationForm()
-    places = mdl.WasteLocation.objects.order_by('-date_updated').all()
-    context = {
-        'form':form,
-        'places':places
-    }
-    return render(request,'',context)
-
-def edit_waste_places_covered(request: HttpRequest, location_id: int, *args, **kwargs) -> JsonResponse:
+def edit_waste_places_covered(request: HttpRequest, location_id: int, *args, **kwargs) -> HttpResponse:
     '''
     @ Update the content of the requested waste location covered
     '''
     waste_location = get_object_or_404(mdl.WasteLocation,id=location_id)
-    if request.is_ajax():
+    if request.method == 'POST':
         form = fms.WasteTypeForm(instance=waste_location,data=request.POST)
         if form.is_valid():
             form.save()
-            # msg.success(request,)
-            return JsonResponse({
-                'success':{
-                    'msg':'Record updated successfully'
-                }
-            })
+            msg.success(request,'Record Updated Successfully')
+            return redirect('waste:add_places')
+            # JsonResponse({
+                # 'success':{
+                    # 'msg':'Record updated successfully'
+                # }
+            # })
     else:
-        form = fms.WasteTypeForm(instance=waste_location)
+        form = fms.WasteLocationForm(instance=waste_location)
     context = {
         'form':form,
         'waste_location':waste_location
     }
-    return render(request,'',context)
+    return render(request,'waste/edit_places.html',context)
 
 def delete_waste_location_covered(request: HttpRequest,location_id: int ,*args, **kwargs) -> HttpResponse:
     '''
@@ -49,21 +40,31 @@ def delete_waste_location_covered(request: HttpRequest,location_id: int ,*args, 
     waste_location = get_object_or_404(mdl.WasteLocation,id=location_id)
     waste_location.delete()
     msg.success(request,'Record Deleted Successfully')
-    return redirect('waste:waste_location')
+    return redirect('waste:add_places')
 
 def add_place_to_cover(request: HttpRequest,*args, **kwargs) -> JsonResponse:
     '''
     @ Add places to cover for waste collection
     '''
-    if request.is_ajax():
+    places = mdl.WasteLocation.objects.order_by('-date_updated').all()
+    if request.method == "POST":
         form = fms.WasteLocationForm(request.POST)
         if form.is_valid():
             form.save()
-            return JsonResponse({
-                'success':{
-                    'msg':'Record Added successfully'
-                }
-            })
+            msg.success(request,'Record Added Successfully.')
+            return redirect('waste:add_places')
+            # JsonResponse({
+                # 'success':{
+                    # 'msg':'Record Added successfully'
+                # }
+            # })
+    else:
+        form = fms.WasteLocationForm()
+    context = {
+        'form':form,
+        'places':places,
+    }
+    return  render(request,'waste/add_places.html',context)
 
 def waste_type_collected(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     '''

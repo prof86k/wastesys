@@ -34,38 +34,50 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
     <!-- calendar file css -->
     <link rel="stylesheet" href="js/semantic.min.html" />
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-      <![endif]-->
 </head>
 
 <body class="inner_page login">
     <div class="full_container">
         <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h3 class="card-title">WASTE MANAGEMENT SYSTEM</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="center verticle_center full_height">
                 <div class="login_section">
                     <div class="logo_login">
                         <div class="center">
                             <h1 style="color:#fff;"> <i class="fa fa-sign-in"></i> LOGIN</h1>
-
                         </div>
                     </div>
                     <div class="login_form">
                         <form action="{% url 'accounts:user_login' %}" method="POST">
                             {% csrf_token %}
                             <fieldset>
-                                <div class="field">
-                                    <label class="label_field">{{form.email.label}}</label> {{form.email}}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="label_field">{{form.email.label}}</label> {{form.email}}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="field">
-                                    <label class="label_field">{{form.password.label}}</label> {{form.password}}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="label_field">{{form.password.label}}</label> {{form.password}}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="field">
                                     <a class="forgot" href="#">Forgotten Password?</a>
                                 </div>
                                 <div class="field">
-                                    <button class="btn btn-success btn-block btn-lg">Sign In</button>
+                                    <button type="submit" class="btn btn-success btn-block btn-lg">Sign In</button>
                                 </div>
                             </fieldset>
                             <div class="forgot">

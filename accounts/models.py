@@ -61,10 +61,10 @@ class User(AbstractBaseUser):
         return self.email
 
     def get_full_name(self, *args,**kwargs) -> str:
-        return self.full_name
+        return self.email
 
     def get_short_name(self, *args, **kwargs) -> str:
-        return self.full_name
+        return self.email
 
     def has_perm(self, perms, obj = None) -> bool:
         return True

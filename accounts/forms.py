@@ -1,13 +1,20 @@
 from django import forms
-from django.db import transaction
 
 from . import models as mdl
 
 
 class UserRegistrationForm(forms.ModelForm):
+    password1   = forms.CharField(label='Password:',max_length=255,widget=forms.PasswordInput(attrs={
+            'class':'form-control','placeholder':'Required Password...',
+            'required':True,
+    }))
+    password2   = forms.CharField(label='Confrim Password:',max_length=255,widget=forms.PasswordInput(attrs={
+        'class':'form-control','placeholder':'Required Password Confirmation...',
+        'required':True,
+    }))
     class Meta:
         model   = mdl.User
-        fields  = ('email','full_name','password')
+        fields  = ('email','full_name')
         widgets = {
             'email':forms.EmailInput(attrs={
                 'class':'form-control','placeholder':'Email Address...',
@@ -17,25 +24,20 @@ class UserRegistrationForm(forms.ModelForm):
                 'class':'form-control','required':True,
                 'placeholder':'Full Name ...',
             }),
-            'password':forms.PasswordInput(attrs={
-                'class':'form-control','placeholder':'Required Password...',
-                'required':True,
-            }),
-            # 'password2':forms.PasswordInput(attrs={
-                # 'class':'form-control','placeholder':'Confirm Password required ...',
-                # 'required':True,
-            # })
         }
     
-    @transaction.atomic
-    def save(self, commit: bool = False):
-        user            = super().save(commit)
-        user.username   =  self.cleaned_data.get('email')
-        user.full_name  = self.cleaned_data.get('full_name')
-        user.password  = self.cleaned_data.get('password')
-        # user.password1  = self.cleaned_data.get('password1')
+    def cleaned_password2(self):
+        password1   = self.cleaned_data.get('password1')
+        password2   = self.cleaned_data.get('password2')
+        if (password1 and password2) and (password1 != password2):
+            raise forms.ValidationError('Passwords Do not match')
+        return password2
+    
+    def save(self):
+        user            = super(UserRegistrationForm,self).save(commit=False)
+        user.set_password(self.cleaned_data.get('password2'))
         user.staff      = True
-        user.save(commit=True)
+        user.save()
         return user
 
 
