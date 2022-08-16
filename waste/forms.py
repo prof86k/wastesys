@@ -65,7 +65,7 @@ class DustBinForm(forms.ModelForm):
                 'required':True,'readonly':True
             }),
             'bin_ready':forms.CheckboxInput(attrs={
-                'class':'form-check-input','placeholder':'Digital Address ...',
+                'class':'form-check-input',
                 'required':True,
             })
         }

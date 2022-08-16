@@ -66,55 +66,44 @@ def add_place_to_cover(request: HttpRequest,*args, **kwargs) -> JsonResponse:
     }
     return  render(request,'waste/add_places.html',context)
 
-def waste_type_collected(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-    '''
-    @ Add the waste type a user can request to dispose form
-    @ list the waste type collected
-    '''
-    form = fms.WasteTypeForm()
-    waste_types = mdl.WasteType.objects.order_by('-date_updated').all()
-    context = {
-        'form':form,
-        'waste_types':waste_types
-    }
-    return render(request,'',context)
-
 def edit_waste_type_collected(request: HttpRequest, waste_id: int, *args, **kwargs) -> HttpResponse:
     '''
     @ Update the content of the requested waste type collected
     '''
     waste_type = get_object_or_404(mdl.WasteType,id=waste_id)
-    if request.is_ajax():
+    if request.method == 'POST':
         form = fms.WasteTypeForm(instance=waste_type,data=request.POST)
         if form.is_valid():
             form.save()
-            # msg.success(request,'Record updated successfully')
-            return JsonResponse({
-                'success':{
-                    'msg':'Record updated successfully',
-                }
-            })
+            msg.success(request,'Record updated successfully')
+            return redirect('waste:add_type')
     else:
         form = fms.WasteTypeForm(instance=waste_type)
     context = {
         'form':form,
         'waste_type':waste_type
     }
-    return render(request,'',context)
+    return render(request,'waste/edit_waste.html',context)
 
-def add_waste_type_collected(request: HttpRequest, *args, **kwargs) -> JsonResponse:
+def add_waste_type_collected(request: HttpRequest, *args, **kwargs) -> HttpResponse:
     '''
+    @ Add the waste type a user can request to dispose form
+    @ list the waste type collected
     @ Add the waste type a user can request to dispose
     '''
-    if request.is_ajax():
+    waste_types = mdl.WasteType.objects.order_by('-date_updated').all()
+    if request.method == 'POST':
         form = fms.WasteTypeForm(request.POST)
         if form.is_valid():
             form.save()
-            return JsonResponse({
-                'success':{
-                    'msg':'Record Added successfully'
-                }
-            })
+            return redirect('waste:add_type')
+    else:
+        form = fms.WasteTypeForm()
+    context = {
+        'waste_types':waste_types,
+        'form':form,
+    }
+    return render(request,'waste/add_waste.html',context)
 
 def delete_waste_type_collected(request: HttpRequest,waste_id: int ,*args, **kwargs) -> HttpResponse:
     '''
@@ -123,28 +112,18 @@ def delete_waste_type_collected(request: HttpRequest,waste_id: int ,*args, **kwa
     waste_type = get_object_or_404(mdl.WasteType,id=waste_id)
     waste_type.delete()
     msg.success(request,'Record Deleted Successfully')
-    return redirect('waste:waste_type')
+    return redirect('waste:add_type')
 
-def waste_disposal(request: HttpRequest, *args, **kwargs) -> HttpResponse:
+
+def request_was_disposal(request: HttpRequest,*args, **kwargs) -> HttpResponse:
     '''
     @ send the disposable bins
     @ list the disposed bins
     @ list the ready bins
-    '''
-    form = fms.DustBinForm()
-    waste_collected = mdl.DustBin.objects.filter(empty_bin=True).all()
-    waste_ready     = mdl.DustBin.objects.filter(bin_ready=True,empty_bin=False).all()
-    context = {
-        'form':form,
-        'waste_collected':waste_collected,
-        'waste_ready':waste_ready
-    }
-    return render(request,'',context)
-
-def request_was_disposal(request: HttpRequest,*args, **kwargs) -> HttpResponse:
-    '''
     @ a user fill in the waste disposal form and submit
     '''
+    waste_collected = mdl.DustBin.objects.filter(empty_bin=True).all()
+    waste_ready     = mdl.DustBin.objects.filter(bin_ready=True,empty_bin=False).all()
     if request.method == 'POST':
         form = fms.DustBinForm(request.POST)
         if form.is_valid():
@@ -154,8 +133,12 @@ def request_was_disposal(request: HttpRequest,*args, **kwargs) -> HttpResponse:
             return redirect('waste:waste_disposed')
     else:
         form = fms.DustBinForm()
-    context = {'form':form}
-    return render(request,'',context)
+    context = {
+    'form':form,
+    'waste_collected':waste_collected,
+    'waste_ready':waste_ready
+    }
+    return render(request,'waste/request_disposal.html',context)
 
 def edit_waste_bin(request: HttpRequest,bin_id: int, *args, **kwargs) -> JsonResponse:
     '''

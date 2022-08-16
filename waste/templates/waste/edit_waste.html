@@ -1,0 +1,40 @@
+{% extends "accounts/base.html" %}
+<!--  -->
+{% block title %} edit| {{waste_type|upper}} {% endblock title %}
+
+<!--  -->
+{% block content %}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 class="header-title">Edit {{waste_type|upper}} Information</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <form id="form" action="{% url 'waste:edit_type' waste_id=waste_type.id %}" method="post">
+                        {% csrf_token %}
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="title">{{form.title.label}}</label> {{form.title}}
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button class="btn btn-success btn-block" type="submit">Save Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
