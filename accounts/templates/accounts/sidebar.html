@@ -9,7 +9,7 @@
         <div class="sidebar_user_info">
             <div class="icon_setting"></div>
             <div class="user_profle_side">
-                <div class="user_img"><img class="img-responsive" src="{% static 'images/layout_img/user_img.jpg' %}" alt="#" /></div>
+                <div class="user_img"><img class="img-responsive" {% if request.user.user_profile.profile_pic %} src="{{request.user.user_profile.profile_pic.url}}" {% else %} src="{% static 'images/layout_img/user_img.jpg' %}" {% endif %} alt="#" /></div>
                 <div class="user_info">
                     <h6>John David</h6>
                     <p><span class="online_animation"></span> Online</p>

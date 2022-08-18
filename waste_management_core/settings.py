@@ -59,7 +59,7 @@ ROOT_URLCONF = 'waste_management_core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': filter(None,os.getenv('TEMPLATES_DIRS',"").split(',')),
+        'DIRS': filter(None, os.getenv('TEMPLATES_DIRS', "").split(',')),
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,21 +74,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'waste_management_core.wsgi.application'
 
+# login redirect url
+# LOGIN_REDIRECT_URL = 'accounts:user_login'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default':{
-        'ENGINE':dbConfig.db_conection.get('ENGINE'),
-        'NAME':dbConfig.db_conection.get('NAME'),
-        'USER':dbConfig.db_conection.get('USER'),
-        'PASSWORD':dbConfig.db_conection.get('PASSWORD'),
-        'PORT':dbConfig.db_conection.get('PORT')
+    'default': {
+        'ENGINE': dbConfig.db_conection.get('ENGINE'),
+        'NAME': dbConfig.db_conection.get('NAME'),
+        'USER': dbConfig.db_conection.get('USER'),
+        'PASSWORD': dbConfig.db_conection.get('PASSWORD'),
+        'PORT': dbConfig.db_conection.get('PORT')
     }
     # 'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
+    # 'ENGINE': 'django.db.backends.sqlite3',
+    # 'NAME': BASE_DIR / 'db.sqlite3',
     # }
 }
 
@@ -124,10 +126,10 @@ USE_I18N = True
 USE_TZ = True
 
 MESSAGE_TAGS = {
-    messages.ERROR:'alert alerts-danger',
-    messages.SUCCESS:'alert alert-success',
-    messages.WARNING:'alert alert-warning',
-    messages.INFO:'alert alert-info',
+    messages.ERROR: 'alert alerts-danger',
+    messages.SUCCESS: 'alert alert-success',
+    messages.WARNING: 'alert alert-warning',
+    messages.INFO: 'alert alert-info',
 }
 
 # Static files (CSS, JavaScript, Images)
@@ -135,13 +137,11 @@ MESSAGE_TAGS = {
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 MEDIA_URL = 'media/'
-MEDIA_ROOT = [ 
-    os.path.join(BASE_DIR,'media'),
-]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

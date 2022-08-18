@@ -1,4 +1,4 @@
-import email
+from datetime import datetime
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import JsonResponse,HttpResponse,HttpRequest
 from django.contrib import messages as msg
@@ -17,7 +17,7 @@ def edit_waste_places_covered(request: HttpRequest, location_id: int, *args, **k
     '''
     waste_location = get_object_or_404(mdl.WasteLocation,id=location_id)
     if request.method == 'POST':
-        form = fms.WasteTypeForm(instance=waste_location,data=request.POST)
+        form = fms.WasteLocationForm(instance=waste_location,data=request.POST)
         if form.is_valid():
             form.save()
             msg.success(request,'Record Updated Successfully')
@@ -55,11 +55,6 @@ def add_place_to_cover(request: HttpRequest,*args, **kwargs) -> JsonResponse:
             form.save()
             msg.success(request,'Record Added Successfully.')
             return redirect('waste:add_places')
-            # JsonResponse({
-                # 'success':{
-                    # 'msg':'Record Added successfully'
-                # }
-            # })
     else:
         form = fms.WasteLocationForm()
     context = {
@@ -67,6 +62,64 @@ def add_place_to_cover(request: HttpRequest,*args, **kwargs) -> JsonResponse:
         'places':places,
     }
     return  render(request,'waste/add_places.html',context)
+
+def view_place_details(request: HttpRequest, place_id: int, *args, **kwargs) -> HttpResponse:
+    '''
+    @ place detailed view 
+    '''
+    place   = get_object_or_404(mdl.WasteLocation,id=place_id)
+    form    = fms.WasteLocationForm(instance=place)
+    context = {
+        'place':place,
+        'form':form
+    }
+    return render(request,'waste/place_details.html',context)
+
+def view_waste_details(request: HttpRequest, *args, **kwargs) -> HttpResponse:
+    '''
+    @ waste detailed view
+    '''
+    wastes  = mdl.DustBin.objects.order_by('-date_updated').filter(bin_collected = False).all()
+    context = {
+        'wastes':wastes,
+        'today':datetime.date(datetime.today()),
+    }
+    return render(request,'waste/waste_details.html',context)
+
+def view_waste_info(request: HttpRequest, waste_id:int,*args, **kwargs) -> HttpResponse:
+    '''
+    @ waste detailed view
+    '''
+    waste  = get_object_or_404(mdl.DustBin, id=waste_id,bin_collected = False)
+    context = {
+        'waste':waste,
+        'today':datetime.date(datetime.today()),
+    }
+    return render(request,'waste/waste_details.html',context)
+
+def confirm_payment(request: HttpRequest,bin_id: int, *args, **kwargs) -> HttpResponse:
+    '''
+    @ Confirm payment if the user has paid
+    @ Confirm payment if the waste bin has not bin collected
+    '''
+    waste_bin   = get_object_or_404(mdl.DustBin,id=bin_id)
+    if waste_bin.payment_made and waste_bin.bin_collected == False:
+        waste_bin.payment_confirm = True
+        waste_bin.save()
+        msg.success(request,'Payment Confirmed')
+        return redirect('waste:waste_details')
+
+def collect_and_dispose(request: HttpRequest,bin_id: int, *args, **kwargs) -> HttpResponse:
+    '''
+    @ Confirm payment if the user has paid
+    @ Confirm payment if the waste bin has not bin collected
+    '''
+    waste_bin   = get_object_or_404(mdl.DustBin,id=bin_id)
+    if waste_bin.payment_made and waste_bin.payment_confirm:
+        waste_bin.bin_collected = True
+        waste_bin.save()
+        msg.success(request,'Waste Collected')
+        return redirect('waste:waste_details')
 
 def edit_waste_type_collected(request: HttpRequest, waste_id: int, *args, **kwargs) -> HttpResponse:
     '''
@@ -191,7 +244,7 @@ def check_waste_bin(request: HttpRequest,bin_id: int, *args, **kwargs) -> HttpRe
             msg.success(request,'Payment made successfully')
             return redirect('waste:check_waste',bin_id=waste_bin.id)
         else:
-            msg.info(request,'Payment made already')
+            msg.info(request,'Payment made on this record already')
             return redirect('waste:check_waste',bin_id=waste_bin.id)
     else:
         form = fms.WastePaymentForm()

@@ -1,14 +1,8 @@
 {% extends "accounts/base.html" %} {% load static %}
 <!--  -->
-{% block title %} Wastes {% endblock title %}
+{% block title %} new posted {% endblock title %}
 <!--  -->
-{% block header %}My Waste{% endblock header %}
-<!--  -->
-{% block page %}
-<a href="{% url 'waste:dispose_waste' %}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="View Other Records">
-    <i class="fa fa-eye"></i> Refuse</a>
-<!--  -->
-{% endblock page %}
+{% block header %} New Post {% endblock header %}
 <!--  -->
 {% block content %}
 <div class="row">
@@ -20,76 +14,82 @@
         {% endfor %}
     </div>
 </div>
-{% for waste_bin in waste_collected %}
+{% for waste in wastes %}
+<!--  -->
+{% if True %}
 <div class="row mb-4">
     <div class="col-md-12 col-sm-12 col-xl-12">
         <div class="card">
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-6">
-                        <h4 class="header-title">{{waste_bin|title}}</h4>
+                        <h4 class="header-title">{{waste|upper}} Information</h4>
                     </div>
+                    {% if not waste.payment_confirm and waste.payment_made %}
                     <div class="col-md-6">
-                        <a href="{% url 'waste:check_waste' bin_id=waste_bin.id %}" class="btn btn-outline-primary offset-8" data-toggle="tooltip" data-placement="top" title="View Other Records">
-                            <i class="fa fa-eye"></i> Refuse Details</a>
-                        <!--  -->
+                        <a href="{% url 'waste:confirm_payment' bin_id=waste.id %}" class="btn btn-outline-success offset-8">Confirm Payment</a>
                     </div>
+                    {% elif waste.payment_confirm %}
+                    <div class="col-md-6">
+                        <a href="{% url 'waste:collected' bin_id=waste.id %}" class="btn btn-outline-primary offset-8">Collect & Dispose</a>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="card-body">
                 <div class="col-md-12">
                     <div class="row mb-4">
                         <div class="col-md-4">
-                            <h5>Waste Bin Label</h5> {{waste_bin}}
+                            <h5>Waste Bin Label</h5> {{waste}}
                         </div>
                         <div class="col-md-4">
                             <h5>Waste Owner</h5>
-                            {{waste_bin.user.full_name}}
+                            {{waste.user.full_name}}
                         </div>
                         <div class="col-md-4">
                             <h5>Payment Status</h5>
-                            {% if waste_bin.payment_made %} <span class="text-success">Paid</span>{% else %} <span class="text-danger">Unpaid</span>{% endif %}
+                            {% if waste.payment_made %} <span class="text-success">Paid</span>{% else %} <span class="text-danger">Unpaid</span>{% endif %}
                         </div>
                     </div>
                     <div class="row mb-4">
                         <div class="col-md-4">
                             <h5>Waste Location</h5>
-                            {{waste_bin.location}}
+                            {{waste.location}}
                         </div>
                         <div class="col-md-4">
                             <h5>Waste Type</h5>
-                            {{waste_bin.waste_type}}
+                            {{waste.waste_type}}
                         </div>
                         <div class="col-md-4">
                             <h5>Waste Digital Address</h5>
-                            {{waste_bin.digital_address}}
+                            {{waste.digital_address}}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
                             <h5>Waste Location Coordinate</h5>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 d-flex">
                                     <div class="col-md-6">
                                         <h6>Latitude</h6>
-                                        {{waste_bin.gps_latitude}}
+                                        {{waste.gps_latitude}}
                                     </div>
                                     <div class="col-md-6">
                                         <h6>Longitude</h6>
-                                        {{waste_bin.gps_longitude}}
+                                        {{waste.gps_longitude}}
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <h5>Waste Collected</h5>
-                            {% if waste_bin.bin_collected %}
+                            {% if waste.bin_collected %}
                             <span class="text-success">Yes</span> {% else %}
                             <span class="text-danger">No</span> {% endif %}
                         </div>
                         <div class="col-md-4">
                             <h5>Payment Confirmed</h5>
-                            {% if waste_bin.payment_confirm %}
+                            {% if waste.payment_confirm %}
                             <span class="text-success">Yes</span> {% else %}
                             <span class="text-danger">No</span> {% endif %}
                         </div>
@@ -99,24 +99,6 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="myModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h4 class="modal-title">Add Refuse Type</h4>
-                    </div>
-                </div>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <!-- Modal body -->
-            <div class="modal-body">
-            </div>
-        </div>
-    </div>
-</div>
-{% endfor %}
+{% endif %} {% endfor %}
 <!--  -->
 {% endblock content %}

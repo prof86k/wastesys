@@ -55,6 +55,15 @@
                             <h1 style="color:#fff;"> <i class="fa fa-sign-in"></i> LOGIN</h1>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            {% for message in messages %}
+                            <div class="alert {{message.tags}} " role="alert">
+                                {{message}}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                     <div class="login_form">
                         <form action="{% url 'accounts:user_login' %}" method="POST">
                             {% csrf_token %}

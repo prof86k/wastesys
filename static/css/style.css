@@ -3179,6 +3179,7 @@ ul.labels-category li p {
     float: left;
     padding: 0 20px 20px 20px;
     width: 100%;
+    overflow-x: hidden;
 }
 
 .tab-content .msg_list_main ul li {

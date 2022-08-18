@@ -51,9 +51,9 @@
                                     <td>{{refuse.date_created}}</td>
                                     <td>{{refuse.date_updated}}</td>
                                     <td>
-                                        <a href="http://" data-toggle="tooltip" class="text-primary mr-3" data-placement="top" title="View Details">
-                                            <i class="fa fa-eye"></i> view
-                                        </a>
+                                        <!-- <a href="{% url 'waste:waste_details' waste_id=refuse.id %}" data-toggle="tooltip" class="text-primary mr-3" data-placement="top" title="View Details"> -->
+                                        <!-- <i class="fa fa-eye"></i> view -->
+                                        <!-- </a> -->
                                         <a href="{% url 'waste:edit_type' waste_id=refuse.id %}" data-toggle="tooltip" class="text-success mr-3" data-placement="top" title="Edit Record">
                                             <i class="fa fa-edit"></i> edit
                                         </a>

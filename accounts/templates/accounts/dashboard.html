@@ -109,21 +109,20 @@
                     <script>
                         document.write(new Date().toUTCString().replace(new Date().toUTCString().substring(17),""));
                     </script>
-                    </span><span class="plus_green_bt"><a href="#">+</a></span></h3>
                 </div>
                 <div class="list_cont">
                     <p>Today Tasks for Waste Collection</p>
                 </div>
                 <div class="task_list_main">
                     <ul class="task_list">
-                        {% for waste in wastes %}
-                        <li><a href="#">{{waste.bin_label}}</a><br><strong>{{waste.user}}</strong></li>
-                        {% endfor %}
+                        {% for waste in wastes %} {% if waste.date_created.date == today %}
+                        <li><a href="#">{{waste|title}}</a><br><strong>{{waste.date_created.time}}</strong></li>
+                        {% endif %} {% endfor %}
                     </ul>
                 </div>
                 <div class="read_more">
                     <div class="center">
-                        <a class="main_bt read_bt" href="#"> <i class="fa fa-eye"></i> See More</a>
+                        <a class="main_bt read_bt" href="{% url 'waste:waste_details' %}"> <i class="fa fa-eye"></i> See More</a>
                     </div>
                 </div>
             </div>
@@ -133,28 +132,27 @@
         <div class="dash_blog">
             <div class="dash_blog_inner">
                 <div class="dash_head">
-                    <h3><span><i class="fa fa-ellipsis-v"></i> Places Covered</span><span class="plus_green_bt"><a href="#">+</a></span></h3>
-                </div>
-                <div class="list_cont">
-                    <p>Places Covered</p>
+                    <h3><span><i class="fa fa-ellipsis-v"></i> Places Covered</span><span class="plus_green_bt"><a href="{% url 'waste:add_places' %}">+</a></span></h3>
                 </div>
                 <div class="msg_list_main">
+                    <div class="list_cont">
+                        <p>Places Covered</p>
+                    </div>
                     <ul class="msg_list">
-                        {% for place in places %}
+                        {% for waste in wastes %} {% if waste.date_created.date == today %}
                         <li>
-                            <span>{{place}}</span>
                             <span>
-                          <span class="name_user">John Smith</span>
-                            <span class="msg_user">Sed ut perspiciatis unde omnis.</span>
-                            <span class="time_ago">12 min ago</span>
+                          <span class="name_user">{{waste.location|title}}</span>
+                            <span class="msg_user">{{waste.digital_address}}</span>
+                            <span class="time_ago">{{waste.waste_type}}</span>
                             </span>
                         </li>
-                        {% endfor %}
+                        {% endif %} {% endfor %}
                     </ul>
                 </div>
                 <div class="read_more">
                     <div class="center">
-                        <a class="main_bt read_bt" href="#"> <i class="fa fa-eye"></i> See More</a>
+                        <a class="main_bt read_bt" href="{% url 'waste:add_places' %}"> <i class="fa fa-eye"></i> See More</a>
                     </div>
                 </div>
             </div>

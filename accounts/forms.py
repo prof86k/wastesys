@@ -56,16 +56,20 @@ class UserLoginForm(forms.Form):
 
 class UserProfileForm(forms.ModelForm):
     '''
-    @ users are allow to update their profile here
+    @ Users are allow to update their profile here
     '''
     class Meta:
+        GENDER  = (('','...'),('male','Male'),('female','Female'))
         model = mdl.UserProfile
-        fields = ('user','profile_pic')
+        fields = ('profile_pic','phone','gender')
         widgets = {
-            'user':forms.TextInput(attrs={
-                'class':'form-control','required':True,
-            }),
             'profile_pic':forms.ClearableFileInput(attrs={
                 'class':'form-control','required':False,
-            })
+            }),
+            'phone':forms.TextInput(attrs={
+                'class':'form-control','required':False,
+            }),
+            'gender':forms.Select(attrs={
+                'class':'form-control','required':False,
+            },choices=GENDER)
         }

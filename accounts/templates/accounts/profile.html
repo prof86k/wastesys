@@ -1,0 +1,93 @@
+{% extends "accounts/base.html" %}
+<!--  -->
+{% load static %}
+<!--  -->
+{% block title %} profile {% endblock title %}
+<!--  -->
+{% block header %} Profile {% endblock header %}
+<!--  -->
+{% block content %}
+<!-- dashboard inner -->
+<div class="container-fluid">
+    <div class="row column1">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="white_shd full margin_bottom_30">
+                <div class="full graph_head">
+                    <div class="heading1 margin_0">
+                        <h2>User profile</h2>
+                    </div>
+                </div>
+                <div class="full price_table padding_infor_info">
+                    <div class="row">
+                        <!-- user profile section -->
+                        <!-- profile image -->
+                        <div class="col-lg-12">
+                            <div class="full dis_flex center_text">
+                                <div class="profile_img"><img width="180" class="rounded-circle" {% if request.user.user_profile.profile_pic %} src="{{request.user.user_profile.profile_pic.url}}" {% else %} src="{% static 'images/layout_img/user_img.jpg' %}" {% endif %} alt="#"
+                                    /></div>
+                                <div class="profile_contant">
+                                    <div class="contact_inner">
+                                        <h3>{{request.user.full_name|title}}</h3>
+                                        <p><strong>About: </strong>{% if request.user.admin %}
+                                            <span>Administrator</span> {% else %}
+                                            <span>Casual User</span> {% endif %}</p>
+                                        <ul class="list-unstyled">
+                                            <li><i class="fa fa-envelope-o"></i> : {{request.user}}</li>
+                                            <li><i class="fa fa-phone"></i> : {{request.user.user_profile.phone}}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="user_progress_bar">
+                                        <div class="progress_bar">
+                                            <!-- Skill Bars -->
+                                            <div class="row">
+                                                <div class="col-md-12 mt-3 mb-3">
+                                                    <h3>Update Information</h3>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <form action="{% url 'accounts:update_profile' user_id=request.user.id %}" method="POST" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="profile_pic">{{form.profile_pic.label}}</label> {{form.profile_pic}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="phone">{{form.phone.label}}</label> {{form.phone}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="gender">{{form.gender.label}}</label>{{form.gender}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <button type="submit" class="btn btn-success">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+<!-- end dashboard inner -->
+{% endblock content %}

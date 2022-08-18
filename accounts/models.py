@@ -92,7 +92,9 @@ class User(AbstractBaseUser):
 
 class UserProfile(models.Model):
     user        = models.OneToOneField(User,on_delete=models.CASCADE,related_name='user_profile')
-    profile_pic = models.ImageField(verbose_name='Profile Picture:',upload_to='profile_pictures/%y/%m/%d',null=True,blank=True)
+    profile_pic = models.ImageField(verbose_name='Profile Picture:',upload_to='images/profile_pictures/%d/%m/%y',null=True,blank=True)
+    phone       = models.CharField(verbose_name='Phone',max_length=15,blank=True, null=True)
+    gender      = models.CharField(verbose_name='gender',max_length=15,blank=True,null=True)
 
     class Meta:
         managed = True

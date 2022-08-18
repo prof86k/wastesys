@@ -54,7 +54,7 @@
                                     <td>{{place.gps_longitude}}</td>
                                     <td>{{place.date_created}}</td>
                                     <td>
-                                        <a href="#" data-toggle="tooltip" class="text-primary mr-3" data-placement="top" title="View Details">
+                                        <a href="{% url 'waste:place_details' place_id=place.id %}" data-toggle="tooltip" class="text-primary mr-3" data-placement="top" title="View Details">
                                             <i class="fa fa-eye"></i> view
                                         </a>
                                         <a href="{% url 'waste:edit_place' location_id=place.id %}" data-toggle="tooltip" class="text-success mr-3" data-placement="top" title="Edit Record">
